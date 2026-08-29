@@ -142,3 +142,8 @@
     color: var(--color-foreground);
   }
 }
+
+/* Override login page background to red */
+.login {
+  background-color: red;
+}
