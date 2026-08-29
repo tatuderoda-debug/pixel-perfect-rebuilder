@@ -41,8 +41,8 @@ function Index() {
 
   return (
     <>
-      <style id="copyai-hard-visual-locks" dangerouslySetInnerHTML={{ __html: locksCss }} />
       <div ref={ref} dangerouslySetInnerHTML={{ __html: homeHtml }} />
+      <style id="copyai-hard-visual-locks" dangerouslySetInnerHTML={{ __html: locksCss }} />
     </>
   );
 }
