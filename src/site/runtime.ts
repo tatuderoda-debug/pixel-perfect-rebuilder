@@ -1,57 +1,10 @@
-// Runtime for the mirrored JordanX page: constellation canvas, hero typewriter,
-// language dropdown, theme switch, category tabs and CTA anchors.
-// Recreates the observed behaviour of the captured page without its original backend.
+// Stable runtime for the mirrored JordanX page.
+// Keeps interaction logic isolated and avoids injecting layout/content after first paint.
 
 type Dot = { x: number; y: number; vx: number; vy: number };
 
 export function initSiteRuntime(root: HTMLElement): () => void {
   const cleanups: Array<() => void> = [];
-
-  /* ---------- conversion enhancements ---------- */
-  const heroCopy = root.querySelector<HTMLElement>('[data-copyai-node-id="n79"]');
-  const heroTitle = root.querySelector<HTMLElement>('[data-copyai-node-id="n80"]');
-  const heroLead = root.querySelector<HTMLElement>('[data-copyai-node-id="n85"]');
-  const heroSub = root.querySelector<HTMLElement>('[data-copyai-node-id="n86"]');
-  const heroCta = root.querySelector<HTMLButtonElement>('[data-copyai-node-id="n88"]');
-
-  if (heroCopy) {
-    heroCopy.classList.add("conversion-hero-copy");
-
-    const badge = document.createElement("div");
-    badge.className = "conversion-badge";
-    badge.innerHTML = '<span class="conversion-badge-dot"></span><span>Escolha sua solução em poucos cliques</span>';
-    heroCopy.insertBefore(badge, heroTitle ?? heroCopy.firstChild);
-
-    if (heroLead) {
-      heroLead.textContent = "Tudo o que você precisa em um só lugar, com uma experiência rápida e direta.";
-      heroLead.classList.add("conversion-lead");
-    }
-
-    if (heroSub) {
-      heroSub.innerHTML = 'Encontre a opção ideal para você e vá direto ao que importa. <span class="conversion-highlight">Sem complicação.</span>';
-      heroSub.classList.add("conversion-sub");
-    }
-
-    if (heroCta) {
-      const label = heroCta.querySelector<HTMLElement>("span");
-      if (label) label.textContent = "VER PRODUTOS AGORA";
-      heroCta.classList.add("conversion-cta");
-      heroCta.setAttribute("aria-label", "Ver produtos agora");
-
-      const microcopy = document.createElement("div");
-      microcopy.className = "conversion-microcopy";
-      microcopy.innerHTML = "<span>⚡ Navegação rápida</span><span>🔒 Experiência segura</span><span>💬 Fácil de escolher</span>";
-      heroCta.insertAdjacentElement("afterend", microcopy);
-    }
-  }
-
-  const firstSection = root.querySelector<HTMLElement>("section");
-  if (firstSection) firstSection.classList.add("conversion-hero-section");
-
-  const sticky = document.createElement("div");
-  sticky.className = "conversion-sticky-cta";
-  sticky.innerHTML = '<div><strong>Pronto para escolher?</strong><span>Veja as opções disponíveis</span></div><button type="button">VER PRODUTOS</button>';
-  root.appendChild(sticky);
 
   /* ---------- constellation background canvas ---------- */
   const canvas = root.querySelector<HTMLCanvasElement>("canvas.pointer-events-none");
@@ -59,43 +12,51 @@ export function initSiteRuntime(root: HTMLElement): () => void {
     const ctx = canvas.getContext("2d");
     let dots: Dot[] = [];
     let raf = 0;
+    let running = true;
+    let resizeTimer = 0;
 
     const build = () => {
       const w = window.innerWidth;
-      const h = Math.max(document.documentElement.scrollHeight, window.innerHeight);
-      canvas.width = w;
-      canvas.height = window.innerHeight;
+      const h = window.innerHeight;
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+      canvas.width = Math.round(w * dpr);
+      canvas.height = Math.round(h * dpr);
       canvas.style.width = `${w}px`;
-      canvas.style.height = `${window.innerHeight}px`;
-      const count = Math.min(150, Math.round((w * h) / 26000));
+      canvas.style.height = `${h}px`;
+      ctx?.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      const count = Math.min(70, Math.max(28, Math.round((w * h) / 28000)));
       dots = Array.from({ length: count }, () => ({
         x: Math.random() * w,
-        y: Math.random() * window.innerHeight,
-        vx: (Math.random() - 0.5) * 0.22,
-        vy: (Math.random() - 0.5) * 0.22,
+        y: Math.random() * h,
+        vx: (Math.random() - 0.5) * 0.16,
+        vy: (Math.random() - 0.5) * 0.16,
       }));
     };
 
     const draw = () => {
-      if (!ctx) return;
-      const w = canvas.width;
-      const h = canvas.height;
+      if (!ctx || !running) return;
+      const w = window.innerWidth;
+      const h = window.innerHeight;
       ctx.clearRect(0, 0, w, h);
+
       for (const d of dots) {
         d.x += d.vx;
         d.y += d.vy;
         if (d.x < 0 || d.x > w) d.vx *= -1;
         if (d.y < 0 || d.y > h) d.vy *= -1;
       }
+
       for (let i = 0; i < dots.length; i++) {
         for (let j = i + 1; j < dots.length; j++) {
           const a = dots[i]!;
           const b = dots[j]!;
           const dx = a.x - b.x;
           const dy = a.y - b.y;
-          const dist = Math.hypot(dx, dy);
-          if (dist < 190) {
-            ctx.strokeStyle = `rgba(99, 148, 255, ${0.18 * (1 - dist / 190)})`;
+          const distSq = dx * dx + dy * dy;
+          if (distSq < 22500) {
+            const dist = Math.sqrt(distSq);
+            ctx.strokeStyle = `rgba(99, 148, 255, ${0.14 * (1 - dist / 150)})`;
             ctx.lineWidth = 1;
             ctx.beginPath();
             ctx.moveTo(a.x, a.y);
@@ -104,22 +65,48 @@ export function initSiteRuntime(root: HTMLElement): () => void {
           }
         }
       }
+
       for (const d of dots) {
-        ctx.fillStyle = "rgba(120, 165, 255, 0.55)";
+        ctx.fillStyle = "rgba(120, 165, 255, 0.48)";
         ctx.beginPath();
-        ctx.arc(d.x, d.y, 1.6, 0, Math.PI * 2);
+        ctx.arc(d.x, d.y, 1.4, 0, Math.PI * 2);
         ctx.fill();
       }
+
       raf = requestAnimationFrame(draw);
+    };
+
+    const start = () => {
+      if (running) return;
+      running = true;
+      raf = requestAnimationFrame(draw);
+    };
+
+    const stop = () => {
+      running = false;
+      cancelAnimationFrame(raf);
+    };
+
+    const onVisibility = () => {
+      if (document.hidden) stop();
+      else start();
+    };
+
+    const onResize = () => {
+      window.clearTimeout(resizeTimer);
+      resizeTimer = window.setTimeout(build, 120);
     };
 
     build();
     raf = requestAnimationFrame(draw);
-    const onResize = () => build();
-    window.addEventListener("resize", onResize);
+    window.addEventListener("resize", onResize, { passive: true });
+    document.addEventListener("visibilitychange", onVisibility);
+
     cleanups.push(() => {
-      cancelAnimationFrame(raf);
+      stop();
+      window.clearTimeout(resizeTimer);
       window.removeEventListener("resize", onResize);
+      document.removeEventListener("visibilitychange", onVisibility);
     });
   }
 
@@ -131,6 +118,7 @@ export function initSiteRuntime(root: HTMLElement): () => void {
     let i = 0;
     let deleting = false;
     let timer = 0;
+
     const step = () => {
       typeTarget.textContent = word.slice(0, i);
       let delay = deleting ? 90 : 150;
@@ -145,6 +133,7 @@ export function initSiteRuntime(root: HTMLElement): () => void {
       }
       timer = window.setTimeout(step, delay);
     };
+
     step();
     cleanups.push(() => window.clearTimeout(timer));
   }
@@ -153,18 +142,22 @@ export function initSiteRuntime(root: HTMLElement): () => void {
   const menu = root.querySelector<HTMLElement>("[data-lang-menu]");
   const langButton = menu?.parentElement?.querySelector<HTMLElement>("button");
   const chevron = langButton?.querySelector<HTMLElement>("svg.lucide-chevron-down");
+
   if (menu && langButton) {
     const setOpen = (open: boolean) => {
       menu.style.display = open ? "block" : "none";
-      if (chevron) chevron.classList.toggle("rotate-180", open);
+      chevron?.classList.toggle("rotate-180", open);
     };
-    const onToggle = (e: Event) => {
-      e.stopPropagation();
+
+    const onToggle = (event: Event) => {
+      event.stopPropagation();
       setOpen(menu.style.display === "none");
     };
+
     const onDocClick = () => setOpen(false);
     langButton.addEventListener("click", onToggle);
     document.addEventListener("click", onDocClick);
+
     cleanups.push(() => {
       langButton.removeEventListener("click", onToggle);
       document.removeEventListener("click", onDocClick);
@@ -173,16 +166,18 @@ export function initSiteRuntime(root: HTMLElement): () => void {
     const options = Array.from(menu.querySelectorAll<HTMLElement>("button"));
     options.forEach((opt) => {
       const handler = () => {
-        options.forEach((o) => {
-          o.classList.remove("bg-primary/10");
-          const label = o.querySelector("span");
+        options.forEach((item) => {
+          item.classList.remove("bg-primary/10");
+          const label = item.querySelector("span");
           label?.classList.remove("text-primary", "font-semibold");
           label?.classList.add("text-foreground");
         });
+
         opt.classList.add("bg-primary/10");
         const label = opt.querySelector("span");
         label?.classList.remove("text-foreground");
         label?.classList.add("text-primary", "font-semibold");
+
         const flag = opt.querySelector("img");
         const current = langButton.querySelector("img");
         if (flag && current) {
@@ -191,19 +186,22 @@ export function initSiteRuntime(root: HTMLElement): () => void {
         }
         setOpen(false);
       };
+
       opt.addEventListener("click", handler);
       cleanups.push(() => opt.removeEventListener("click", handler));
     });
   }
 
-  /* ---------- theme switch (dark / light) ---------- */
+  /* ---------- theme switch ---------- */
   const themeButton = Array.from(root.querySelectorAll<HTMLElement>("header button")).find(
-    (b) => b.querySelector("svg.lucide-moon") && b.querySelector("svg.lucide-sun"),
+    (button) => button.querySelector("svg.lucide-moon") && button.querySelector("svg.lucide-sun"),
   );
+
   if (themeButton) {
     const [moonWrap, sunWrap] = Array.from(themeButton.children) as HTMLElement[];
     const moonIcon = moonWrap?.querySelector<HTMLElement>("svg");
     const sunIcon = sunWrap?.querySelector<HTMLElement>("svg");
+
     const apply = (dark: boolean) => {
       const html = document.documentElement;
       html.classList.toggle("dark", dark);
@@ -215,6 +213,7 @@ export function initSiteRuntime(root: HTMLElement): () => void {
       sunIcon?.classList.toggle("text-white", !dark);
       sunIcon?.classList.toggle("text-muted-foreground", dark);
     };
+
     const onClick = () => apply(!document.documentElement.classList.contains("dark"));
     themeButton.addEventListener("click", onClick);
     cleanups.push(() => themeButton.removeEventListener("click", onClick));
@@ -224,70 +223,48 @@ export function initSiteRuntime(root: HTMLElement): () => void {
   const tabs = Array.from(root.querySelectorAll<HTMLElement>("button.category-tab"));
   tabs.forEach((tab) => {
     const handler = () => {
-      tabs.forEach((t) => t.classList.remove("active"));
+      tabs.forEach((item) => item.classList.remove("active"));
       tab.classList.add("active");
     };
     tab.addEventListener("click", handler);
     cleanups.push(() => tab.removeEventListener("click", handler));
   });
 
-  /* ---------- CTAs / footer anchors scroll to the products section ---------- */
-  const productsSection = Array.from(root.querySelectorAll<HTMLElement>("section")).find((s) =>
-    s.querySelector("button.category-tab"),
+  /* ---------- CTA and footer scrolling ---------- */
+  const productsSection = Array.from(root.querySelectorAll<HTMLElement>("section")).find((section) =>
+    section.querySelector("button.category-tab"),
   );
-  const scrollToProducts = () => productsSection?.scrollIntoView({ behavior: "smooth", block: "start" });
+
   const scrollTargets: HTMLElement[] = [
     ...Array.from(root.querySelectorAll<HTMLElement>("button.btn-primary")),
-    ...Array.from(root.querySelectorAll<HTMLElement>('a[href="#"]')).filter((a) =>
-      /catalogo/i.test(a.textContent ?? ""),
+    ...Array.from(root.querySelectorAll<HTMLElement>('a[href="#"]')).filter((anchor) =>
+      /catalogo/i.test(anchor.textContent ?? ""),
     ),
   ];
-  scrollTargets.forEach((el) => {
-    const handler = (e: Event) => {
-      e.preventDefault();
-      scrollToProducts();
+
+  scrollTargets.forEach((element) => {
+    const handler = (event: Event) => {
+      event.preventDefault();
+      productsSection?.scrollIntoView({ behavior: "smooth", block: "start" });
     };
-    el.addEventListener("click", handler);
-    cleanups.push(() => el.removeEventListener("click", handler));
+    element.addEventListener("click", handler);
+    cleanups.push(() => element.removeEventListener("click", handler));
   });
 
-  const stickyButton = sticky.querySelector<HTMLButtonElement>("button");
-  if (stickyButton) {
-    const handler = () => scrollToProducts();
-    stickyButton.addEventListener("click", handler);
-    cleanups.push(() => stickyButton.removeEventListener("click", handler));
-  }
-
-  const onScroll = () => {
-    if (window.innerWidth > 767) {
-      sticky.classList.remove("is-visible");
-      return;
-    }
-    const threshold = Math.max(420, window.innerHeight * 0.65);
-    sticky.classList.toggle("is-visible", window.scrollY > threshold);
-  };
-  window.addEventListener("scroll", onScroll, { passive: true });
-  window.addEventListener("resize", onScroll);
-  onScroll();
-  cleanups.push(() => {
-    window.removeEventListener("scroll", onScroll);
-    window.removeEventListener("resize", onScroll);
-    sticky.remove();
-  });
-
-  const homeLinks = Array.from(root.querySelectorAll<HTMLElement>('a[href="#"]')).filter((a) =>
-    /pagina inicial/i.test(a.textContent ?? ""),
+  const homeLinks = Array.from(root.querySelectorAll<HTMLElement>('a[href="#"]')).filter((anchor) =>
+    /pagina inicial/i.test(anchor.textContent ?? ""),
   );
-  homeLinks.forEach((el) => {
-    const handler = (e: Event) => {
-      e.preventDefault();
+
+  homeLinks.forEach((element) => {
+    const handler = (event: Event) => {
+      event.preventDefault();
       window.scrollTo({ top: 0, behavior: "smooth" });
     };
-    el.addEventListener("click", handler);
-    cleanups.push(() => el.removeEventListener("click", handler));
+    element.addEventListener("click", handler);
+    cleanups.push(() => element.removeEventListener("click", handler));
   });
 
-  /* ---------- feedback carousel: pause on hover (as captured) ---------- */
+  /* ---------- feedback carousel ---------- */
   const track = root.querySelector<HTMLElement>(".feedback-carousel-track");
   if (track) {
     const enter = () => track.classList.add("paused");
@@ -300,5 +277,5 @@ export function initSiteRuntime(root: HTMLElement): () => void {
     });
   }
 
-  return () => cleanups.forEach((fn) => fn());
+  return () => cleanups.forEach((cleanup) => cleanup());
 }
