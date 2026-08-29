@@ -7,6 +7,52 @@ type Dot = { x: number; y: number; vx: number; vy: number };
 export function initSiteRuntime(root: HTMLElement): () => void {
   const cleanups: Array<() => void> = [];
 
+  /* ---------- conversion enhancements ---------- */
+  const heroCopy = root.querySelector<HTMLElement>('[data-copyai-node-id="n79"]');
+  const heroTitle = root.querySelector<HTMLElement>('[data-copyai-node-id="n80"]');
+  const heroLead = root.querySelector<HTMLElement>('[data-copyai-node-id="n85"]');
+  const heroSub = root.querySelector<HTMLElement>('[data-copyai-node-id="n86"]');
+  const heroCta = root.querySelector<HTMLButtonElement>('[data-copyai-node-id="n88"]');
+
+  if (heroCopy) {
+    heroCopy.classList.add("conversion-hero-copy");
+
+    const badge = document.createElement("div");
+    badge.className = "conversion-badge";
+    badge.innerHTML = '<span class="conversion-badge-dot"></span><span>Escolha sua solução em poucos cliques</span>';
+    heroCopy.insertBefore(badge, heroTitle ?? heroCopy.firstChild);
+
+    if (heroLead) {
+      heroLead.textContent = "Tudo o que você precisa em um só lugar, com uma experiência rápida e direta.";
+      heroLead.classList.add("conversion-lead");
+    }
+
+    if (heroSub) {
+      heroSub.innerHTML = 'Encontre a opção ideal para você e vá direto ao que importa. <span class="conversion-highlight">Sem complicação.</span>';
+      heroSub.classList.add("conversion-sub");
+    }
+
+    if (heroCta) {
+      const label = heroCta.querySelector<HTMLElement>("span");
+      if (label) label.textContent = "VER PRODUTOS AGORA";
+      heroCta.classList.add("conversion-cta");
+      heroCta.setAttribute("aria-label", "Ver produtos agora");
+
+      const microcopy = document.createElement("div");
+      microcopy.className = "conversion-microcopy";
+      microcopy.innerHTML = "<span>⚡ Navegação rápida</span><span>🔒 Experiência segura</span><span>💬 Fácil de escolher</span>";
+      heroCta.insertAdjacentElement("afterend", microcopy);
+    }
+  }
+
+  const firstSection = root.querySelector<HTMLElement>("section");
+  if (firstSection) firstSection.classList.add("conversion-hero-section");
+
+  const sticky = document.createElement("div");
+  sticky.className = "conversion-sticky-cta";
+  sticky.innerHTML = '<div><strong>Pronto para escolher?</strong><span>Veja as opções disponíveis</span></div><button type="button">VER PRODUTOS</button>';
+  root.appendChild(sticky);
+
   /* ---------- constellation background canvas ---------- */
   const canvas = root.querySelector<HTMLCanvasElement>("canvas.pointer-events-none");
   if (canvas) {
@@ -124,7 +170,6 @@ export function initSiteRuntime(root: HTMLElement): () => void {
       document.removeEventListener("click", onDocClick);
     });
 
-    // Selecting a language marks it active (front-end only, as captured).
     const options = Array.from(menu.querySelectorAll<HTMLElement>("button"));
     options.forEach((opt) => {
       const handler = () => {
@@ -190,6 +235,7 @@ export function initSiteRuntime(root: HTMLElement): () => void {
   const productsSection = Array.from(root.querySelectorAll<HTMLElement>("section")).find((s) =>
     s.querySelector("button.category-tab"),
   );
+  const scrollToProducts = () => productsSection?.scrollIntoView({ behavior: "smooth", block: "start" });
   const scrollTargets: HTMLElement[] = [
     ...Array.from(root.querySelectorAll<HTMLElement>("button.btn-primary")),
     ...Array.from(root.querySelectorAll<HTMLElement>('a[href="#"]')).filter((a) =>
@@ -199,10 +245,34 @@ export function initSiteRuntime(root: HTMLElement): () => void {
   scrollTargets.forEach((el) => {
     const handler = (e: Event) => {
       e.preventDefault();
-      productsSection?.scrollIntoView({ behavior: "smooth", block: "start" });
+      scrollToProducts();
     };
     el.addEventListener("click", handler);
     cleanups.push(() => el.removeEventListener("click", handler));
+  });
+
+  const stickyButton = sticky.querySelector<HTMLButtonElement>("button");
+  if (stickyButton) {
+    const handler = () => scrollToProducts();
+    stickyButton.addEventListener("click", handler);
+    cleanups.push(() => stickyButton.removeEventListener("click", handler));
+  }
+
+  const onScroll = () => {
+    if (window.innerWidth > 767) {
+      sticky.classList.remove("is-visible");
+      return;
+    }
+    const threshold = Math.max(420, window.innerHeight * 0.65);
+    sticky.classList.toggle("is-visible", window.scrollY > threshold);
+  };
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", onScroll);
+  onScroll();
+  cleanups.push(() => {
+    window.removeEventListener("scroll", onScroll);
+    window.removeEventListener("resize", onScroll);
+    sticky.remove();
   });
 
   const homeLinks = Array.from(root.querySelectorAll<HTMLElement>('a[href="#"]')).filter((a) =>
