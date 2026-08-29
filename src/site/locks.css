@@ -13,8 +13,8 @@
 [data-copyai-node-id="n251"]{color:rgb(255, 255, 255)!important}
 [data-copyai-node-id="n267"]{background-color:rgb(220, 38, 38)!important;box-shadow:rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.1) 0px 4px 6px -4px!important}
 [data-copyai-node-id="n268"]{color:rgb(255, 255, 255)!important}
-[data-copyai-node-id="n88"].btn-primary{background:linear-gradient(135deg,#2563eb,#3b82f6)!important;color:#fff!important;box-shadow:0 14px 34px rgba(37,99,235,.35)!important;border:1px solid rgba(147,197,253,.35)!important;transform:translateY(0);transition:transform .2s ease,box-shadow .2s ease,filter .2s ease!important}
-[data-copyai-node-id="n88"].btn-primary:hover{background:linear-gradient(135deg,#1d4ed8,#2563eb)!important;box-shadow:0 18px 44px rgba(37,99,235,.48)!important;transform:translateY(-2px);filter:saturate(1.08)}
+[data-copyai-node-id="n88"].btn-primary{background:linear-gradient(135deg,#dc2626,#ef4444)!important;color:#fff!important;box-shadow:0 14px 34px rgba(220,38,38,.35)!important;border:1px solid rgba(252,165,165,.35)!important;transform:translateY(0);transition:transform .2s ease,box-shadow .2s ease,filter .2s ease!important}
+[data-copyai-node-id="n88"].btn-primary:hover{background:linear-gradient(135deg,#b91c1c,#dc2626)!important;box-shadow:0 18px 44px rgba(220,38,38,.48)!important;transform:translateY(-2px);filter:saturate(1.08)}
 
 .conversion-hero-section{padding-top:28px!important}
 .conversion-hero-copy{max-width:680px}
@@ -38,7 +38,7 @@
 .conversion-sticky-cta div{display:flex;flex-direction:column;min-width:0}
 .conversion-sticky-cta strong{font-size:13px;color:#fff;white-space:nowrap}
 .conversion-sticky-cta span{font-size:11px;color:#94a3b8;white-space:nowrap}
-.conversion-sticky-cta button{border:0;border-radius:12px;background:linear-gradient(135deg,#2563eb,#3b82f6);color:#fff;font-size:11px;font-weight:900;padding:12px 14px;white-space:nowrap;box-shadow:0 10px 25px rgba(37,99,235,.35)}
+.conversion-sticky-cta button{border:0;border-radius:12px;background:linear-gradient(135deg,#dc2626,#ef4444);color:#fff;font-size:11px;font-weight:900;padding:12px 14px;white-space:nowrap;box-shadow:0 10px 25px rgba(220,38,38,.35)}
 
 @keyframes conversionPulse{0%,100%{opacity:.75;transform:scale(.9)}50%{opacity:1;transform:scale(1.08)}}
 @keyframes conversionShine{0%,68%{transform:translateX(-70%)}100%{transform:translateX(70%)}}
