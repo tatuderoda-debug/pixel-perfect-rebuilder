@@ -143,9 +143,9 @@
   }
 }
 
-/* Override login page background to orange */
+/* Override login page background to hot pink */
 .login {
-  background-color: orange !important;
+  background-color: #ff1493 !important;
   min-height: 100vh;
   width: 100vw;
   position: fixed;
