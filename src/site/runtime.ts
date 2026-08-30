@@ -277,5 +277,50 @@ export function initSiteRuntime(root: HTMLElement): () => void {
     });
   }
 
+
+  /* ---------- conversion layer: CTAs, urgency timer, sticky bar ---------- */
+  root.querySelectorAll<HTMLElement>("[data-cv-scroll]").forEach((el) => {
+    const handler = () => {
+      const id = el.getAttribute("data-cv-scroll") || "";
+      const target = document.getElementById(id);
+      target?.scrollIntoView({ behavior: "smooth", block: "start" });
+    };
+    el.addEventListener("click", handler);
+    cleanups.push(() => el.removeEventListener("click", handler));
+  });
+
+  const timer = root.querySelector<HTMLElement>("[data-cv-timer]");
+  if (timer) {
+    const tick = () => {
+      const now = new Date();
+      const end = new Date(now);
+      end.setHours(23, 59, 59, 999);
+      const diff = Math.max(0, end.getTime() - now.getTime());
+      const h = Math.floor(diff / 3600000);
+      const m = Math.floor((diff % 3600000) / 60000);
+      const s = Math.floor((diff % 60000) / 1000);
+      const pad = (n: number) => String(n).padStart(2, "0");
+      timer.textContent = `${pad(h)}:${pad(m)}:${pad(s)}`;
+    };
+    tick();
+    const id = window.setInterval(tick, 1000);
+    cleanups.push(() => window.clearInterval(id));
+  }
+
+  const sticky = root.querySelector<HTMLElement>("[data-cv-sticky]");
+  if (sticky) {
+    const onScroll = () => {
+      const past = window.scrollY > 640;
+      const offer = document.getElementById("cv-oferta");
+      const nearOffer = offer
+        ? offer.getBoundingClientRect().top < window.innerHeight * 0.9
+        : false;
+      sticky.classList.toggle("is-visible", past && !nearOffer);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    cleanups.push(() => window.removeEventListener("scroll", onScroll));
+  }
+
   return () => cleanups.forEach((cleanup) => cleanup());
 }
