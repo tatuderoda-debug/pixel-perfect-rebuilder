@@ -273,7 +273,7 @@ body { background-color: hsl(var(--background)); color: hsl(var(--foreground)); 
 .text-indigo-400 { --tw-text-opacity: 1; color: rgb(129 140 248/var(--tw-text-opacity,1)); }
 .text-muted-foreground { color: hsl(var(--muted-foreground)); }
 .text-orange-400 { --tw-text-opacity: 1; color: rgb(251 146 60/var(--tw-text-opacity,1)); }
-.text-pink-400 { --tw-text-opacity: 1; color: rgb(244 114 182/var(--tw-text-opacity,1)); }
+.text-pink-400 { --tw-text-opacity: 1; color: rgb(250 204 21/var(--tw-text-opacity,1)); }
 .text-primary { color: hsl(var(--primary)); }
 .text-purple-400 { --tw-text-opacity: 1; color: rgb(192 132 252/var(--tw-text-opacity,1)); }
 .text-red-400 { --tw-text-opacity: 1; color: rgb(248 113 113/var(--tw-text-opacity,1)); }
@@ -427,17 +427,17 @@ body { background-color: hsl(var(--background)); color: hsl(var(--foreground)); 
 .search-input::placeholder { color: hsl(var(--muted-foreground)); }
 .search-input:focus { outline: none; border-color: hsl(var(--primary)); }
 .border-green-accent { border-left-color: rgb(74, 222, 128); }
-.border-pink-accent { border-left-color: rgb(244, 114, 182); }
+.border-pink-accent { border-left-color: rgb(250, 204, 21); }
 .border-blue-accent { border-left-color: rgb(96, 165, 250); }
 .border-red-accent { border-left-color: rgb(248, 113, 113); }
 .border-yellow-accent { border-left-color: rgb(251, 191, 36); }
 .text-green-accent { color: rgb(74, 222, 128); }
-.text-pink-accent { color: rgb(244, 114, 182); }
+.text-pink-accent { color: rgb(250, 204, 21); }
 .text-blue-accent { color: rgb(96, 165, 250); }
 .text-red-accent { color: rgb(248, 113, 113); }
 .text-yellow-accent { color: rgb(251, 191, 36); }
 .bg-green-accent { background-color: rgb(74, 222, 128); }
-.bg-pink-accent { background-color: rgb(244, 114, 182); }
+.bg-pink-accent { background-color: rgb(250, 204, 21); }
 .bg-blue-accent { background-color: rgb(96, 165, 250); }
 .bg-red-accent { background-color: rgb(248, 113, 113); }
 .bg-yellow-accent { background-color: rgb(251, 191, 36); }
