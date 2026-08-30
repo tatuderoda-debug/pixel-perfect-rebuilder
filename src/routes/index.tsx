@@ -25,14 +25,14 @@ body:before {
 .hero-card:after,
 [data-copyai-node-id="n78"]:after,
 [data-copyai-node-id="n167"]:after {
-  background: radial-gradient(circle, rgba(219,39,119,.13), transparent 70%) !important;
+  background: radial-gradient(circle, rgba(255,255,255,.13), transparent 70%) !important;
 }
 .stats-card,
 .feature-card {
   background: linear-gradient(145deg, rgba(52,7,30,.90), rgba(3,3,3,.97)) !important;
 }
 .category-big-card:hover {
-  background: linear-gradient(145deg, rgba(219,39,119,.13), rgba(5,5,5,.72)) !important;
+  background: linear-gradient(145deg, rgba(255,255,255,.13), rgba(5,5,5,.72)) !important;
 }
 .conversion-sticky-cta {
   background: linear-gradient(135deg, rgba(55,8,32,.96), rgba(1,1,1,.98)) !important;
