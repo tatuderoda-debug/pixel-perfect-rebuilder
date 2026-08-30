@@ -7,35 +7,35 @@ import { initSiteRuntime } from "../site/runtime";
 
 const redBackgroundOverrides = `
 body:before {
-  background: radial-gradient(circle at 16% 10%, rgba(34,197,94,.24), transparent 32%),
-    radial-gradient(circle at 82% 36%, rgba(22,163,74,.14), transparent 30%),
-    radial-gradient(circle at 52% 82%, rgba(74,222,128,.09), transparent 28%),
+  background: radial-gradient(circle at 16% 10%, rgba(236,72,153,.24), transparent 32%),
+    radial-gradient(circle at 82% 36%, rgba(219,39,119,.14), transparent 30%),
+    radial-gradient(circle at 52% 82%, rgba(244,114,182,.09), transparent 28%),
     linear-gradient(180deg, rgba(0,0,0,.04), rgba(0,0,0,.58)) !important;
 }
 .hero-card,
 [data-copyai-node-id="n78"],
 [data-copyai-node-id="n167"] {
-  background: linear-gradient(145deg, rgba(8,55,24,.96) 0%, rgba(3,3,3,.99) 52%, rgba(6,48,20,.94) 100%) !important;
+  background: linear-gradient(145deg, rgba(55,8,32,.96) 0%, rgba(3,3,3,.99) 52%, rgba(48,6,28,.94) 100%) !important;
 }
 .hero-card:before,
 [data-copyai-node-id="n78"]:before,
 [data-copyai-node-id="n167"]:before {
-  background: radial-gradient(circle, rgba(34,197,94,.22), transparent 66%) !important;
+  background: radial-gradient(circle, rgba(236,72,153,.22), transparent 66%) !important;
 }
 .hero-card:after,
 [data-copyai-node-id="n78"]:after,
 [data-copyai-node-id="n167"]:after {
-  background: radial-gradient(circle, rgba(22,163,74,.13), transparent 70%) !important;
+  background: radial-gradient(circle, rgba(219,39,119,.13), transparent 70%) !important;
 }
 .stats-card,
 .feature-card {
-  background: linear-gradient(145deg, rgba(7,52,20,.90), rgba(3,3,3,.97)) !important;
+  background: linear-gradient(145deg, rgba(52,7,30,.90), rgba(3,3,3,.97)) !important;
 }
 .category-big-card:hover {
-  background: linear-gradient(145deg, rgba(22,163,74,.13), rgba(5,5,5,.72)) !important;
+  background: linear-gradient(145deg, rgba(219,39,119,.13), rgba(5,5,5,.72)) !important;
 }
 .conversion-sticky-cta {
-  background: linear-gradient(135deg, rgba(8,55,24,.96), rgba(1,1,1,.98)) !important;
+  background: linear-gradient(135deg, rgba(55,8,32,.96), rgba(1,1,1,.98)) !important;
 }
 `;
 
