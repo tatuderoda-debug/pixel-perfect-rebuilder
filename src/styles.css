@@ -153,3 +153,18 @@
   left: 0;
   z-index: 9999;
 }
+
+/* Hide the "Edit with Lovable" badge on the live website */
+[id^="lovable-badge"],
+.lovable-badge,
+.lovable-edit-badge,
+iframe[src*="lovable"][src*="badge"],
+a[href*="lovable.app"][aria-label*="Lovable"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  overflow: hidden !important;
+}
