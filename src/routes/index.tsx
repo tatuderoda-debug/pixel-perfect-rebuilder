@@ -15,12 +15,12 @@ body:before {
 .hero-card,
 [data-copyai-node-id="n78"],
 [data-copyai-node-id="n167"] {
-  background: linear-gradient(145deg, rgba(56,44,4,.96) 0%, rgba(3,3,3,.99) 52%, rgba(48,38,3,.94) 100%) !important;
+  background: linear-gradient(145deg, rgba(38,14,66,.96) 0%, rgba(3,3,3,.99) 52%, rgba(32,10,58,.94) 100%) !important;
 }
 .hero-card:before,
 [data-copyai-node-id="n78"]:before,
 [data-copyai-node-id="n167"]:before {
-  background: radial-gradient(circle, rgba(250,204,21,.22), transparent 66%) !important;
+  background: radial-gradient(circle, rgba(168,85,247,.22), transparent 66%) !important;
 }
 .hero-card:after,
 [data-copyai-node-id="n78"]:after,
@@ -29,13 +29,14 @@ body:before {
 }
 .stats-card,
 .feature-card {
-  background: linear-gradient(145deg, rgba(52,41,4,.90), rgba(3,3,3,.97)) !important;
+  background: linear-gradient(145deg, rgba(35,12,62,.90), rgba(3,3,3,.97)) !important;
 }
 .category-big-card:hover {
-  background: linear-gradient(145deg, rgba(255,255,255,.13), rgba(5,5,5,.72)) !important;
+  background: linear-gradient(145deg, rgba(168,85,247,.13), rgba(5,5,5,.72)) !important;
 }
 .conversion-sticky-cta {
-  background: linear-gradient(135deg, rgba(56,44,4,.96), rgba(1,1,1,.98)) !important;
+  background: linear-gradient(135deg, rgba(38,14,66,.96), rgba(1,1,1,.98)) !important;
+
 }
 `;
 
