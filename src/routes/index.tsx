@@ -15,7 +15,7 @@ body:before {
 .hero-card,
 [data-copyai-node-id="n78"],
 [data-copyai-node-id="n167"] {
-  background: linear-gradient(145deg, rgba(8,48,28,.96) 0%, rgba(3,3,3,.99) 52%, rgba(6,42,24,.94) 100%) !important;
+  background: linear-gradient(145deg, rgba(55,8,32,.96) 0%, rgba(3,3,3,.99) 52%, rgba(48,6,28,.94) 100%) !important;
 }
 .hero-card:before,
 [data-copyai-node-id="n78"]:before,
@@ -29,13 +29,13 @@ body:before {
 }
 .stats-card,
 .feature-card {
-  background: linear-gradient(145deg, rgba(7,45,26,.90), rgba(3,3,3,.97)) !important;
+  background: linear-gradient(145deg, rgba(52,7,30,.90), rgba(3,3,3,.97)) !important;
 }
 .category-big-card:hover {
   background: linear-gradient(145deg, rgba(255,255,255,.13), rgba(5,5,5,.72)) !important;
 }
 .conversion-sticky-cta {
-  background: linear-gradient(135deg, rgba(8,48,28,.96), rgba(1,1,1,.98)) !important;
+  background: linear-gradient(135deg, rgba(55,8,32,.96), rgba(1,1,1,.98)) !important;
 }
 `;
 
