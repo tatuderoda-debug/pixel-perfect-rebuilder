@@ -7,11 +7,12 @@ import { initSiteRuntime } from "../site/runtime";
 
 const redBackgroundOverrides = `
 body:before {
-  background: radial-gradient(circle at 16% 10%, rgba(255,255,255,.24), transparent 32%),
-    radial-gradient(circle at 82% 36%, rgba(255,255,255,.14), transparent 30%),
-    radial-gradient(circle at 52% 82%, rgba(255,255,255,.09), transparent 28%),
+  background: radial-gradient(circle at 16% 10%, rgba(192,132,252,.24), transparent 32%),
+    radial-gradient(circle at 82% 36%, rgba(147,51,234,.16), transparent 30%),
+    radial-gradient(circle at 52% 82%, rgba(216,180,254,.10), transparent 28%),
     linear-gradient(180deg, rgba(0,0,0,.04), rgba(0,0,0,.58)) !important;
 }
+
 .hero-card,
 [data-copyai-node-id="n78"],
 [data-copyai-node-id="n167"] {
