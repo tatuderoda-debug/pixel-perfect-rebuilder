@@ -143,9 +143,10 @@
   }
 }
 
-/* Override login page background to yellow */
+/* Override login page background to purple */
 .login {
-  background-color: #ffd400 !important;
+  background-color: #7c3aed !important;
+
   min-height: 100vh;
   width: 100vw;
   position: fixed;
