@@ -1,85 +1,73 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useRef } from "react";
-
-import homeHtml from "../site/home.html?raw";
-import locksCss from "../site/locks.css?raw";
-import { initSiteRuntime } from "../site/runtime";
-
-const redBackgroundOverrides = `
-body:before {
-  background: radial-gradient(circle at 16% 10%, rgba(192,132,252,.24), transparent 32%),
-    radial-gradient(circle at 82% 36%, rgba(147,51,234,.16), transparent 30%),
-    radial-gradient(circle at 52% 82%, rgba(216,180,254,.10), transparent 28%),
-    linear-gradient(180deg, rgba(0,0,0,.04), rgba(0,0,0,.58)) !important;
-}
-
-.hero-card,
-[data-copyai-node-id="n78"],
-[data-copyai-node-id="n167"] {
-  background: linear-gradient(145deg, rgba(38,14,66,.96) 0%, rgba(3,3,3,.99) 52%, rgba(32,10,58,.94) 100%) !important;
-}
-.hero-card:before,
-[data-copyai-node-id="n78"]:before,
-[data-copyai-node-id="n167"]:before {
-  background: radial-gradient(circle, rgba(168,85,247,.22), transparent 66%) !important;
-}
-.hero-card:after,
-[data-copyai-node-id="n78"]:after,
-[data-copyai-node-id="n167"]:after {
-  background: radial-gradient(circle, rgba(255,255,255,.13), transparent 70%) !important;
-}
-.stats-card,
-.feature-card {
-  background: linear-gradient(145deg, rgba(35,12,62,.90), rgba(3,3,3,.97)) !important;
-}
-.category-big-card:hover {
-  background: linear-gradient(145deg, rgba(168,85,247,.13), rgba(5,5,5,.72)) !important;
-}
-.conversion-sticky-cta {
-  background: linear-gradient(135deg, rgba(38,14,66,.96), rgba(1,1,1,.98)) !important;
-
-}
-`;
+import hero from "@/assets/padaria-hero.jpg";
+import "../site/bakery.css";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "JordanX — Domine o jogo sem limites" },
-      {
-        name: "description",
-        content:
-          "Paineis, otimizacao, bypass e headtrick. Tudo o que voce precisa para elevar sua gameplay ao proximo nivel.",
-      },
-      { property: "og:title", content: "JordanX — Domine o jogo sem limites" },
-      {
-        property: "og:description",
-        content:
-          "Paineis, otimizacao, bypass e headtrick. Tudo o que voce precisa para elevar sua gameplay ao proximo nivel.",
-      },
+      { title: "Padaria System X — Pães artesanais todos os dias" },
+      { name: "description", content: "Pães, bolos e doces artesanais feitos diariamente na Padaria System X." },
+      { property: "og:title", content: "Padaria System X — Pães artesanais" },
+      { property: "og:description", content: "Pães, bolos e doces artesanais feitos diariamente." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-    ],
-    links: [
-      { rel: "icon", href: "/images/logo.webp" },
-      { rel: "apple-touch-icon", href: "/images/logo.webp" },
     ],
   }),
   component: Index,
 });
 
+const produtos = [
+  { n: "Pão de Fermentação Natural", d: "Casca crocante, miolo aerado.", p: "R$ 18,00" },
+  { n: "Croissant na Manteiga", d: "Folhado leve e amanteigado.", p: "R$ 9,00" },
+  { n: "Baguete Tradicional", d: "Receita francesa, assada na hora.", p: "R$ 8,50" },
+  { n: "Bolo de Cenoura", d: "Com cobertura de chocolate.", p: "R$ 32,00" },
+];
+
 function Index() {
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!ref.current) return;
-    return initSiteRuntime(ref.current);
-  }, []);
-
   return (
-    <>
-      <div ref={ref} dangerouslySetInnerHTML={{ __html: homeHtml }} />
-      <style id="copyai-hard-visual-locks" dangerouslySetInnerHTML={{ __html: locksCss }} />
-      <style id="red-background-overrides" dangerouslySetInnerHTML={{ __html: redBackgroundOverrides }} />
-    </>
+    <div className="bk">
+      <nav className="bk-nav">
+        <div className="bk-logo">System <span>X</span></div>
+        <ul>
+          <li><a href="#produtos">Produtos</a></li>
+          <li><a href="#sobre">Sobre</a></li>
+          <li><a href="#contato">Contato</a></li>
+        </ul>
+      </nav>
+      <section className="bk-hero">
+        <div>
+          <h1>Pão quentinho, <em>feito com calma</em>.</h1>
+          <p>Na Padaria System X, cada fornada nasce de fermentação lenta, farinha selecionada e muito carinho. Venha sentir o cheiro.</p>
+          <a className="bk-btn" href="#produtos">Ver produtos</a>
+        </div>
+        <img src={hero} alt="Balcão da padaria com pães artesanais" />
+      </section>
+      <section id="produtos" className="bk-sec">
+        <h2>Nossos favoritos</h2>
+        <div className="bk-grid">
+          {produtos.map((x) => (
+            <div className="bk-card" key={x.n}>
+              <h3>{x.n}</h3>
+              <p>{x.d}</p>
+              <div className="bk-price">{x.p}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+      <section id="sobre" className="bk-sec">
+        <h2>Sobre nós</h2>
+        <p style={{ fontFamily: "system-ui,sans-serif", lineHeight: 1.7, maxWidth: 700, color: "#5a4636" }}>
+          Somos uma padaria de bairro que acredita no tempo certo das coisas. Nossos pães descansam por até 24 horas antes de irem ao forno.
+        </p>
+      </section>
+      <section id="contato" className="bk-sec bk-info">
+        <div className="bk-grid">
+          <div><strong>Horário</strong>Seg a Sáb: 6h às 20h<br />Dom: 7h às 13h</div>
+          <div><strong>Endereço</strong>Rua das Flores, 123<br />Centro</div>
+          <div><strong>Contato</strong>(11) 0000-0000<br />contato@systemx.com</div>
+        </div>
+      </section>
+      <footer className="bk-foot">© 2026 Padaria System X</footer>
+    </div>
   );
 }
